@@ -16,3 +16,8 @@
 ## ref
 
 * https://github.com/rhysd/unite-ruby-require.vim/
+
+## license
+
+* GPL-3 or later
+
