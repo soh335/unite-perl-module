@@ -11,4 +11,4 @@
 
 ## ref
 
-    * https://github.com/rhysd/unite-ruby-require.vim/
+* https://github.com/rhysd/unite-ruby-require.vim/
