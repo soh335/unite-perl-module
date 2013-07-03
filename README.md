@@ -16,6 +16,7 @@
 ## ref
 
 * https://github.com/rhysd/unite-ruby-require.vim/
+* http://soh335.hatenablog.com/entry/2013/07/02/200156
 
 ## license
 
