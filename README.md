@@ -1,5 +1,9 @@
 # unite-perl-module
 
+it is beta quality.
+
+## feature
+
 * source
     * perl-module/cpan
     * perl-module/carton
