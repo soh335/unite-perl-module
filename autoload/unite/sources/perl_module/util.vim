@@ -48,6 +48,11 @@ function! s:source.async_gather_candidates(args, context)
   else
     let a:context.is_async = 0
     call s:P.stop(self.source__process_name())
+
+    if err != ''
+      return []
+    endif
+
     let formatted = s:_format(out)
     let self.source__ramcache += formatted
     call s:_spit_cache(self.source__ramcache, self.source__cache_name())
