@@ -20,7 +20,7 @@ let s:source = unite#sources#perl_module#util#new_source({
       \})
 
 function! s:source.source__command()
-  let dir = s:search_carton_lock()
+  let dir = s:search_cpanfile_snapshot()
   let cmd = [s:helper_path]
   if dir != -1
     call add(cmd, dir)
@@ -29,7 +29,7 @@ function! s:source.source__command()
 endfunction
 
 function! s:source.source__cache_name()
-  let dir = s:search_carton_lock()
+  let dir = s:search_cpanfile_snapshot()
   if dir != -1
     let dir = "perl_module_carton_list:" . fnameescape(dir)
   else
@@ -42,11 +42,11 @@ function! s:source.source__process_name()
   return "unite_carton_list"
 endfunction
 
-function! s:search_carton_lock()
+function! s:search_cpanfile_snapshot()
   let dir = expand('%:p:h')
   let parent_dir = ''
   while isdirectory(dir) && dir !=# parent_dir
-    if globpath(dir, '/carton.lock') != ''
+    if globpath(dir, '/cpanfile.snapshot') != ''
       return dir
     endif
     let parent_dir = dir
