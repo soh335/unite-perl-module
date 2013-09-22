@@ -3,6 +3,10 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! s:_vital_depends()
+  return ['Vim.Buffer']
+endfunction
+
 function! s:_vital_loaded(V)
   let s:V = a:V
   let s:B = s:V.import('Vim.Buffer')
@@ -154,7 +158,7 @@ function! s:open(buffer, opener)
   try
     if s:V.is_funcref(a:opener)
       let loaded = !bufloaded(a:buffer)
-      call a:opener(a:bufname)
+      call a:opener(a:buffer)
     elseif a:buffer is 0 || a:buffer is ''
       let loaded = 1
       silent execute a:opener
