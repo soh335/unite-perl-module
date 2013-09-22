@@ -21,6 +21,7 @@ it is beta quality.
 
 * https://github.com/rhysd/unite-ruby-require.vim/
 * http://soh335.hatenablog.com/entry/2013/07/02/200156
+* http://soh335.hatenablog.com/entry/2013/09/22/183544
 
 ## license
 
