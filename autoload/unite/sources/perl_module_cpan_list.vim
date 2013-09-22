@@ -3,6 +3,7 @@ set cpo&vim
 
 let s:V = vital#of('unite-perl-module')
 let s:F = s:V.import('System.Filepath')
+let s:P = s:V.import('Prelude')
 
 function! unite#sources#perl_module_cpan_list#define()
   return unite#sources#perl_module#util#is_available() ? s:source : {}
@@ -24,7 +25,7 @@ function! s:source.source__command()
 endfunction
 
 function! s:source.source__cache_name()
-  return "perl_module_cpan_list"
+  return s:P.system("perl -MDigest::MD5 -e 'print \"perl_module_cpan_\" . Digest::MD5::md5_hex(join(\"\", @INC))'")
 endfunction
 
 function! s:source.source__process_name()
