@@ -1,9 +1,17 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+let s:V = vital#of('unite-perl-module')
+let s:F = s:V.import('System.Filepath')
+
 function! unite#sources#perl_module_cpan_list#define()
   return unite#sources#perl_module#util#is_available() ? s:source : {}
 endfunction
+
+let s:helper_path = printf(
+      \ '%s%scpan_list.sh',
+      \ expand('<sfile>:p:h'),
+      \ s:F.separator())
 
 let s:source = unite#sources#perl_module#util#new_source({
       \ "name": "perl-module/cpan",
@@ -12,7 +20,7 @@ let s:source = unite#sources#perl_module#util#new_source({
       \ })
 
 function! s:source.source__command()
-  return "find `perl -e 'pop @INC; print join(q{ }, @INC);'` -name '*.pm' -type f | xargs egrep -o 'package [a-zA-Z0-9:]+;' | perl -nle 's/package\\s+(.*);/$1/; print' | sort | uniq"
+  return s:helper_path
 endfunction
 
 function! s:source.source__cache_name()
