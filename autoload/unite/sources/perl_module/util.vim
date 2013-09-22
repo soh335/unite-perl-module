@@ -4,15 +4,23 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:V = vital#of('unite-perl-module')
-let s:P = s:V.import('ProcessManager')
+let s:PM = s:V.import('ProcessManager')
+let s:P = s:V.import('Prelude')
 let s:C = s:V.import('System.Cache')
+let s:F = s:V.import('System.Filepath')
 
 let s:source = {
       \ "source__ramcache" : ["undefined"],
       \}
 
+let s:helper_path = printf(
+      \ '%s%smodule_list.sh',
+      \ expand('<sfile>:p:h'),
+      \ s:F.separator())
+
+
 function! unite#sources#perl_module#util#is_available()
-  return s:P.is_available()
+  return s:PM.is_available()
 endfunction
 
 function! unite#sources#perl_module#util#new_source(opt)
@@ -34,8 +42,18 @@ function! s:source.gather_candidates(args, context)
 endfunction
 
 function! s:source.async_gather_candidates(args, context)
-  call s:P.touch(self.source__process_name(), self.source__command())
-  let [out, err, type] = s:P.read(self.source__process_name(), ['$'])
+  let directories = self.source__target_directories()
+
+  if ! (type(directories) == type([]) && len(directories) > 0)
+    let a:context.is_async = 0
+    call unite#util#print_error("no directories")
+    return []
+  endif
+
+  let cmd = [s:helper_path]
+  call extend(cmd, directories)
+  call s:PM.touch(self.source__process_name(), join(cmd, " "))
+  let [out, err, type] = s:PM.read(self.source__process_name(), ['$'])
   call unite#util#print_error(err)
 
   if type ==# 'timedout'
@@ -43,11 +61,11 @@ function! s:source.async_gather_candidates(args, context)
     let self.source__ramcache += formatted
     return formatted
   elseif type ==# 'inactive'
-    call s:P.stop(self.source__process_name())
+    call s:PM.stop(self.source__process_name())
     return s:source.async_gather_candidates(a:args, a:context)
   else
     let a:context.is_async = 0
-    call s:P.stop(self.source__process_name())
+    call s:PM.stop(self.source__process_name())
 
     if err != ''
       return []

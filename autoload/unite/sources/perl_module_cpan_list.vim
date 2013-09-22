@@ -20,7 +20,14 @@ let s:source = unite#sources#perl_module#util#new_source({
       \ "max_candidates": 100
       \ })
 
-function! s:source.source__command()
+function! s:source.source__target_directories()
+  let path = s:P.system("perl -e 'pop @INC; print join(q{ }, @INC);'")
+  if s:P.get_last_status() != 0
+    call unite#util#print_error(path)
+    return []
+  else
+    return split(path, " ")
+  endif
   return s:helper_path
 endfunction
 

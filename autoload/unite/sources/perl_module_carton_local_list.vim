@@ -20,8 +20,14 @@ let s:source = unite#sources#perl_module#util#new_source({
       \ "max_candidates": 100
       \})
 
-function! s:source.source__command()
-  return s:helper_path
+function! s:source.source__target_directories()
+  let path = s:P.system("carton exec -- perl -e 'print join q{ }, grep { index($_, $ENV{PERL5LIB}) > -1 } @INC'")
+  if s:P.get_last_status() != 0
+    call unite#util#print_error(path)
+    return []
+  else
+    return split(path, " ")
+  endif
 endfunction
 
 function! s:source.source__cache_name()
