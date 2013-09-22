@@ -6,7 +6,7 @@ it is beta quality.
 
 * source
     * perl-module/cpan
-    * perl-module/carton
+    * perl-module/carton-local ( listing modules in carton local path )
 
 * action
     * perldoc by ref.vim
